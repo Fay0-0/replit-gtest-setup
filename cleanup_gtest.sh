@@ -7,7 +7,6 @@ echo "🧹 Starting FULL cleanup — restoring original Replit C++ environment..
 ##############################################################
 
 echo "🗑 Removing CMake and GoogleTest directories..."
-
 rm -rf build
 rm -rf src
 rm -rf tests
@@ -27,19 +26,14 @@ rm -f test_runner*
 rm -f CMakeCache.txt
 rm -f *.o
 
-##############################################################
-# 3. REMOVE ANY STALE CMAKE SYSTEM FILES
-##############################################################
-
 echo "🗑 Removing CMake internal build metadata..."
 rm -rf CMakeFiles
 
 ##############################################################
-# 4. RESTORE DEFAULT replit.nix
+# 3. RESTORE DEFAULT replit.nix
 ##############################################################
 
 echo "🔄 Restoring default replit.nix..."
-
 cat > replit.nix << 'EOF'
 { pkgs }: {
   deps = [
@@ -49,22 +43,20 @@ cat > replit.nix << 'EOF'
 EOF
 
 ##############################################################
-# 5. RESTORE DEFAULT .replit
+# 4. RESTORE DEFAULT .replit
 ##############################################################
 
 echo "🔄 Restoring default .replit..."
-
 cat > .replit << 'EOF'
 run = "./main"
 compile = "make"
 EOF
 
 ##############################################################
-# 6. RESTORE DEFAULT Makefile
+# 5. RESTORE DEFAULT Makefile
 ##############################################################
 
 echo "🛠 Restoring default Makefile..."
-
 cat > Makefile << 'EOF'
 CC = g++
 CFLAGS = -std=c++17 -Wall
@@ -80,12 +72,12 @@ clean:
 EOF
 
 ##############################################################
-# 7. RESTORE main.cpp IF MISSING
+# 6. RESTORE main.cpp IF MISSING
 ##############################################################
 
 if [ ! -f main.cpp ]; then
-echo "📝 Restoring default main.cpp"
-cat > main.cpp << 'EOF'
+  echo "📝 Restoring default main.cpp"
+  cat > main.cpp << 'EOF'
 #include <iostream>
 int main() {
     std::cout << "Hello World!" << std::endl;
@@ -97,7 +89,7 @@ else
 fi
 
 ##############################################################
-# 8. REBUILD & RUN DEFAULT PROJECT
+# 7. REBUILD & RUN DEFAULT PROJECT
 ##############################################################
 
 echo "🔨 Building default project using Makefile..."
@@ -105,10 +97,6 @@ make
 
 echo "🏃 Running default program..."
 ./main
-
-##############################################################
-# 9. DONE!
-##############################################################
 
 echo "🎉 Cleanup complete!"
 echo "🧼 Replit C++ environment fully restored!"

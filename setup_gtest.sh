@@ -3,44 +3,83 @@
 echo "🚀 Starting GoogleTest Setup with AUTO-CLEAN..."
 
 ##############################################################
-# 0. AUTO-CLEAN (Fix stale builds, default files, conflicts)
+# 0. AUTO-CLEAN (remove conflicting old files)
 ##############################################################
 
 echo "🧹 Cleaning old conflicting files..."
 
-# Remove default Replit C++ project files
+# Remove default Replit C++ files
 rm -f main.cpp main Makefile
 
-# Remove old cmake leftovers
+# Remove old CMake leftovers
 rm -rf build CMakeFiles CMakeCache.txt cmake_install.cmake
 
 # Remove old executables
 find . -name "main_app" -delete
 find . -name "main_appe" -delete
-find . -name "main_app*" -delete
 find . -name "test_runner" -delete
 
 echo "✨ Auto-clean complete."
 
 ##############################################################
-# 1. Create structure
+# 1. Create folder structure
 ##############################################################
 
 mkdir -p src
 mkdir -p tests
 
 ##############################################################
-# 2. Create tests/test.cpp
+# 2. Create src/add.h
+##############################################################
+
+echo "📝 Writing src/add.h"
+cat > src/add.h << 'EOF'
+#pragma once
+
+int add(int a, int b);
+EOF
+
+##############################################################
+# 3. Create src/add.cpp
+##############################################################
+
+echo "📝 Writing src/add.cpp"
+cat > src/add.cpp << 'EOF'
+#include "add.h"
+
+int add(int a, int b) {
+    return a + b;
+}
+EOF
+
+##############################################################
+# 4. Create src/main.cpp
+##############################################################
+
+echo "📝 Writing src/main.cpp"
+cat > src/main.cpp << 'EOF'
+#include "add.h"
+#include <iostream>
+
+int main() {
+    std::cout << "main_app running! add(2,3) = " << add(2,3) << std::endl;
+    return 0;
+}
+EOF
+
+##############################################################
+# 5. Create tests/test.cpp
 ##############################################################
 
 echo "📝 Writing tests/test.cpp"
 cat > tests/test.cpp << 'EOF'
 #include <gtest/gtest.h>
-
-int add(int a, int b);
+#include "add.h"
 
 TEST(AdditionTest, Basic) {
     EXPECT_EQ(add(2, 3), 5);
+    EXPECT_EQ(add(-1, 1), 0);
+    EXPECT_EQ(add(0, 0), 0);
 }
 
 int main(int argc, char **argv) {
@@ -50,24 +89,7 @@ int main(int argc, char **argv) {
 EOF
 
 ##############################################################
-# 3. Create src/main.cpp
-##############################################################
-
-echo "📝 Writing src/main.cpp"
-cat > src/main.cpp << 'EOF'
-int add(int a, int b) {
-    return a + b;
-}
-
-#include <iostream>
-int main() {
-    std::cout << "main_app running! add(2,3)=" << add(2,3) << std::endl;
-    return 0;
-}
-EOF
-
-##############################################################
-# 4. Create CMakeLists.txt
+# 6. Create CMakeLists.txt (uses add_lib)
 ##############################################################
 
 echo "🛠 Writing CMakeLists.txt"
@@ -77,13 +99,24 @@ project(ReplitGTestProject)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(main_app src/main.cpp)
+# Shared library for add()
+add_library(add_lib src/add.cpp)
 
-add_executable(test_runner tests/test.cpp)
+# Main application
+add_executable(main_app
+    src/main.cpp
+)
+target_link_libraries(main_app add_lib)
+
+# GoogleTest runner
+add_executable(test_runner
+    tests/test.cpp
+)
 
 find_package(GTest REQUIRED)
 
 target_link_libraries(test_runner
+    add_lib
     GTest::gtest
     GTest::gtest_main
     pthread
@@ -91,7 +124,7 @@ target_link_libraries(test_runner
 EOF
 
 ##############################################################
-# 5. Create replit.nix
+# 7. Create replit.nix
 ##############################################################
 
 echo "🛠 Writing replit.nix"
@@ -107,7 +140,7 @@ cat > replit.nix << 'EOF'
 EOF
 
 ##############################################################
-# 6. Create .clangd
+# 8. Create .clangd (fix IntelliSense)
 ##############################################################
 
 echo "🧠 Writing .clangd"
@@ -119,7 +152,7 @@ CompileFlags:
 EOF
 
 ##############################################################
-# 7. Create .replit
+# 9. Create .replit (Run button + commands)
 ##############################################################
 
 echo "⚙ Writing .replit"
@@ -170,7 +203,7 @@ make test_runner
 EOF
 
 ##############################################################
-# 8. Initial CMake Build
+# 10. Initial CMake build
 ##############################################################
 
 echo "🔨 Running initial build..."
