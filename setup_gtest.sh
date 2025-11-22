@@ -3,21 +3,22 @@
 echo "🔧 Starting FULL GoogleTest Setup for Replit (CMake Mode)…"
 
 #########################################
-# 1. Ensure directories exist
+# 1. Ensure folders
 #########################################
 
 mkdir -p src
 mkdir -p tests
 
 #########################################
-# 2. Create tests/test.cpp (ALWAYS)
+# 2. Write tests/test.cpp
 #########################################
 
 echo "📝 Writing tests/test.cpp"
+
 cat > tests/test.cpp << 'EOF'
 #include <gtest/gtest.h>
 
-int add(int a, int b);  // from main_app
+int add(int a, int b); // from main_app
 
 TEST(AdditionTest, Basic) {
     EXPECT_EQ(add(2, 3), 5);
@@ -30,10 +31,11 @@ int main(int argc, char **argv) {
 EOF
 
 #########################################
-# 3. Create src/main.cpp ONLY IF missing
+# 3. Create src/main.cpp ONLY IF MISSING
 #########################################
 
 if [ ! -f src/main.cpp ]; then
+
 echo "📝 Creating src/main.cpp"
 
 cat > src/main.cpp << 'EOF'
@@ -43,16 +45,17 @@ int add(int a, int b) {
 
 #include <iostream>
 int main() {
-    std::cout << "Main app running! add(2,3)=" << add(2,3) << "\\n";
+    std::cout << "main_app running! add(2,3)=" << add(2,3) << std::endl;
     return 0;
 }
 EOF
+
 else
   echo "✔ src/main.cpp exists — keeping it"
 fi
 
 #########################################
-# 4. Full CMakeLists.txt (Two Executables)
+# 4. Correct CMakeLists (2 separate executables)
 #########################################
 
 echo "🛠 Writing CMakeLists.txt"
@@ -63,12 +66,12 @@ project(ReplitGTestProject)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# Main application
+# Main program
 add_executable(main_app
     src/main.cpp
 )
 
-# GoogleTest executable
+# GoogleTest runner
 add_executable(test_runner
     tests/test.cpp
 )
@@ -85,8 +88,6 @@ EOF
 # 5. Write replit.nix
 #########################################
 
-echo "🛠 Writing replit.nix"
-
 cat > replit.nix << 'EOF'
 { pkgs }: {
   deps = [
@@ -99,10 +100,8 @@ cat > replit.nix << 'EOF'
 EOF
 
 #########################################
-# 6. IntelliSense Fix (.clangd)
+# 6. Write .clangd
 #########################################
-
-echo "🧠 Writing .clangd"
 
 cat > .clangd << 'EOF'
 CompileFlags:
@@ -112,13 +111,14 @@ CompileFlags:
 EOF
 
 #########################################
-# 7. .replit (Fully Working Run Buttons)
+# 7. Write .replit (FULL FIXED)
 #########################################
 
-echo "⚙ Writing .replit configuration"
+echo "⚙ Writing .replit"
 
 cat > .replit << 'EOF'
 run = """
+# Auto-heal build
 if [ ! -f build/Makefile ]; then
   rm -rf build
   mkdir build
@@ -127,6 +127,7 @@ if [ ! -f build/Makefile ]; then
 else
   cd build
 fi
+
 make main_app
 ./main_app
 """
@@ -136,44 +137,4 @@ make main_app
 run_main = """
 if [ ! -f build/Makefile ]; then
   rm -rf build
-  mkdir build
-  cd build
-  cmake ..
-else
-  cd build
-fi
-make main_app
-./main_app
-"""
-
-run_tests = """
-if [ ! -f build/Makefile ]; then
-  rm -rf build
-  mkdir build
-  cd build
-  cmake ..
-else
-  cd build
-fi
-make test_runner
-./test_runner
-"""
-EOF
-
-#########################################
-# 8. Initial CMake run (Auto Build)
-#########################################
-
-echo "🔨 Performing initial build…"
-
-rm -rf build
-mkdir build
-cd build
-cmake ..
-make
-
-echo "🎉 GoogleTest Installation Complete!"
-echo "➡ Run button executes MAIN APP"
-echo "➡ 'run_tests' runs GoogleTests"
-echo "➡ 'run_main' runs main_app manually"
 

@@ -2,28 +2,12 @@
 
 echo "🧹 Starting cleanup — restoring original Replit C++ environment..."
 
-#########################################
-# 1. Remove GTest folders and files
-#########################################
-
-echo "🗑 Removing build/, tests/, and src/ folders..."
-rm -rf build
-rm -rf tests
-rm -rf src
-
-echo "🗑 Removing generated files..."
-rm -f CMakeLists.txt
-rm -f .clangd
-rm -f test_runner
-rm -f main_app
-rm -f main
-rm -f main-debug
+rm -rf build src tests
+rm -f CMakeLists.txt .clangd test_runner main_app main main-debug replit.nix
 
 #########################################
-# 2. Restore default replit.nix
+# Restore default replit.nix
 #########################################
-
-echo "🔄 Restoring default replit.nix..."
 
 cat > replit.nix << 'EOF'
 { pkgs }: {
@@ -34,10 +18,17 @@ cat > replit.nix << 'EOF'
 EOF
 
 #########################################
-# 3. Restore default Makefile
+# Restore default .replit
 #########################################
 
-echo "🛠 Restoring default Makefile..."
+cat > .replit << 'EOF'
+run = "./main"
+compile = "make"
+EOF
+
+#########################################
+# Restore default Makefile
+#########################################
 
 cat > Makefile << 'EOF'
 CC = g++
@@ -54,47 +45,25 @@ clean:
 EOF
 
 #########################################
-# 4. Restore default .replit
+# Restore main.cpp if missing
 #########################################
 
-echo "🔄 Restoring default .replit..."
-
-cat > .replit << 'EOF'
-run = "./main"
-compile = "make"
-EOF
-
-#########################################
-# 5. Restore main.cpp if missing
-#########################################
-
-if [ ! -f "main.cpp" ]; then
-  echo "📝 main.cpp missing — restoring default main.cpp"
-  cat > main.cpp << 'EOF'
+if [ ! -f main.cpp ]; then
+cat > main.cpp << 'EOF'
 #include <iostream>
 int main() {
     std::cout << "Hello from restored Replit C++ environment!" << std::endl;
     return 0;
 }
 EOF
-else
-  echo "✔ Keeping your existing main.cpp"
 fi
 
 #########################################
-# 6. Auto-compile + auto-run (NO USER ACTION NEEDED)
+# Auto-build and run
 #########################################
 
-echo "🔨 Compiling using restored Makefile..."
 make
-
-echo "🏃 Running the restored default program..."
 ./main
 
-#########################################
-# 7. Done!
-#########################################
-
-echo "🎉 Cleanup complete!"
-echo "🧼 Replit C++ environment restored and program executed successfully."
+echo "🎉 Cleanup complete and running!"
 
