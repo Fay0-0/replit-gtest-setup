@@ -3,7 +3,7 @@
 echo "🧹 Starting cleanup — restoring original Replit C++ environment..."
 
 #########################################
-# 1. Remove auto-generated dirs
+# 1. Remove GTest folders and files
 #########################################
 
 echo "🗑 Removing build/, tests/, and src/ folders..."
@@ -11,22 +11,19 @@ rm -rf build
 rm -rf tests
 rm -rf src
 
-#########################################
-# 2. Remove auto-generated files
-#########################################
-
-echo "🗑 Removing generated config files..."
+echo "🗑 Removing generated files..."
 rm -f CMakeLists.txt
 rm -f .clangd
 rm -f test_runner
+rm -f main_app
 rm -f main
 rm -f main-debug
 
 #########################################
-# 3. Restore original replit.nix (C++)
+# 2. Restore default replit.nix
 #########################################
 
-echo "🔄 Restoring default Replit C++ replit.nix..."
+echo "🔄 Restoring default replit.nix..."
 
 cat > replit.nix << 'EOF'
 { pkgs }: {
@@ -37,88 +34,67 @@ cat > replit.nix << 'EOF'
 EOF
 
 #########################################
-# 4. Restore default .replit
+# 3. Restore default Makefile
 #########################################
 
-echo "🔄 Restoring default .replit configuration..."
+echo "🛠 Restoring default Makefile..."
 
-cat > .replit << 'EOF'
-compile = "make -s"
-run = "./main"
-entrypoint = "main.cpp"
-hidden = ["main", "**/*.o", "**/*.d", ".ccls-cache", "Makefile"]
+cat > Makefile << 'EOF'
+CC = g++
+CFLAGS = -std=c++17 -Wall
+TARGET = main
 
-[nix]
-channel = "stable-24_05"
+all: $(TARGET)
 
-[gitHubImport]
-requiredFiles = [".replit", "replit.nix", ".ccls-cache"]
+$(TARGET): main.cpp
+	$(CC) $(CFLAGS) main.cpp -o $(TARGET)
 
-[debugger]
-support = true
-
-[debugger.compile]
-command = ["make", "main-debug"]
-noFileArgs = true
-
-[debugger.interactive]
-transport = "stdio"
-startCommand = ["dap-cpp"]
-
-[debugger.interactive.initializeMessage]
-command = "initialize"
-type = "request"
-
-[debugger.interactive.initializeMessage.arguments]
-adapterID = "cppdbg"
-clientID = "replit"
-clientName = "replit.com"
-columnsStartAt1 = true
-linesStartAt1 = true
-locale = "en-us"
-pathFormat = "path"
-supportsInvalidatedEvent = true
-supportsProgressReporting = true
-supportsRunInTerminalRequest = true
-supportsVariablePaging = true
-supportsVariableType = true
-
-[debugger.interactive.launchMessage]
-command = "launch"
-type = "request"
-
-[debugger.interactive.launchMessage.arguments]
-MIMode = "gdb"
-arg = []
-cwd = "."
-environment = []
-externalConsole = false
-logging = {}
-miDebuggerPath = "gdb"
-name = "g++ - Build and debug active file"
-request = "launch"
-setupCommands = [
-    { description = "Enable pretty-printing for gdb", ignoreFailures = true, text = "-enable-pretty-printing" }
-]
-stopAtEntry = false
-type = "cppdbg"
-
-[languages]
-
-[languages.cpp]
-pattern = "**/*.{cpp,h}"
-
-[languages.cpp.languageServer]
-start = "ccls"
-
-[agent]
-expertMode = true
+clean:
+	rm -f $(TARGET)
 EOF
 
 #########################################
-# 5. Finished!
+# 4. Restore default .replit
+#########################################
+
+echo "🔄 Restoring default .replit..."
+
+cat > .replit << 'EOF'
+run = "./main"
+compile = "make"
+EOF
+
+#########################################
+# 5. Restore main.cpp if missing
+#########################################
+
+if [ ! -f "main.cpp" ]; then
+  echo "📝 main.cpp missing — restoring default main.cpp"
+  cat > main.cpp << 'EOF'
+#include <iostream>
+int main() {
+    std::cout << "Hello from restored Replit C++ environment!" << std::endl;
+    return 0;
+}
+EOF
+else
+  echo "✔ Keeping your existing main.cpp"
+fi
+
+#########################################
+# 6. Auto-compile + auto-run (NO USER ACTION NEEDED)
+#########################################
+
+echo "🔨 Compiling using restored Makefile..."
+make
+
+echo "🏃 Running the restored default program..."
+./main
+
+#########################################
+# 7. Done!
 #########################################
 
 echo "🎉 Cleanup complete!"
-echo "🧼 Your Replit project is now fully restored to default C++ environment."
+echo "🧼 Replit C++ environment restored and program executed successfully."
 
