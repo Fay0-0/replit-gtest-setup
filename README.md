@@ -33,3 +33,14 @@ This project fixes everything in **one command** 😎
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/CodeWithSouma/replit-gtest-setup/main/setup_gtest.sh)
 
+---
+
+## 🧹 Cleanup Script — Restore Default Replit C++ Environment
+
+If you want to **remove everything installed by the GoogleTest auto-installer** and restore your Replit project back to a **fresh default C++ template**, just run the cleanup command below in your Replit Shell:
+
+### **Cleanup Command:**
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/CodeWithSouma/replit-gtest-setup/main/cleanup_gtest.sh)
+

@@ -1,30 +1,19 @@
 #!/bin/bash
 
-echo "🔧 Starting Safe GoogleTest Setup for Replit..."
+echo "🔧 Starting FULL GoogleTest Setup for Replit (Auto-Healing Mode)…"
 
 #########################################
-# 1. Create directories (safe)
+# 1. Ensure required directories exist
 #########################################
 
-if [ ! -d "src" ]; then
-  echo "📁 Creating src/ directory"
-  mkdir -p src
-else
-  echo "✔ src/ directory already exists"
-fi
-
-if [ ! -d "tests" ]; then
-  echo "📁 Creating tests/ directory"
-  mkdir -p tests
-else
-  echo "✔ tests/ directory already exists"
-fi
+mkdir -p src
+mkdir -p tests
 
 #########################################
-# 2. Create/override test.cpp
+# 2. Create sample test.cpp ALWAYS
 #########################################
 
-echo "📝 Writing sample GoogleTest file → tests/test.cpp"
+echo "📝 Writing tests/test.cpp"
 cat > tests/test.cpp << 'EOF'
 #include <gtest/gtest.h>
 
@@ -41,11 +30,11 @@ int main(int argc, char **argv) {
 EOF
 
 #########################################
-# 3. Create main.cpp ONLY IF missing
+# 3. Create main.cpp ONLY if missing
 #########################################
 
-if [ ! -f "src/main.cpp" ]; then
-  echo "📝 Creating src/main.cpp (since it doesn't exist)"
+if [ ! -f src/main.cpp ]; then
+echo "📝 Creating src/main.cpp"
 
 cat > src/main.cpp << 'EOF'
 int add(int a, int b) {
@@ -56,20 +45,19 @@ int main() {
     return 0;
 }
 EOF
-
 else
-  echo "✔ src/main.cpp exists — using your existing code"
+  echo "✔ src/main.cpp exists — keeping it"
 fi
 
 #########################################
-# 4. Write CMakeLists.txt
+# 4. Auto-generate CMakeLists.txt ALWAYS
 #########################################
 
-echo "🛠 Updating CMakeLists.txt"
+echo "🛠 Writing CMakeLists.txt"
 
 cat > CMakeLists.txt << 'EOF'
 cmake_minimum_required(VERSION 3.10)
-project(GTestProject)
+project(ReplitGTestProject)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -87,10 +75,10 @@ target_link_libraries(test_runner
 EOF
 
 #########################################
-# 5. Write replit.nix
+# 5. Auto-generate replit.nix ALWAYS
 #########################################
 
-echo "🛠 Writing replit.nix (GTest installation)"
+echo "🛠 Writing replit.nix"
 
 cat > replit.nix << 'EOF'
 { pkgs }: {
@@ -104,36 +92,10 @@ cat > replit.nix << 'EOF'
 EOF
 
 #########################################
-# 6. Write .replit config
+# 6. Auto-generate .clangd (IntelliSense fix)
 #########################################
 
-echo "⚙ Writing .replit config"
-
-cat > .replit << 'EOF'
-run = """
-if [ ! -d build ]; then 
-  mkdir build && cd build && cmake ..; 
-fi
-cd build && make && ./test_runner
-"""
-
-[commands]
-
-run_tests = """
-if [ ! -d build ]; then 
-  mkdir build && cd build && cmake ..; 
-fi
-cd build && make && ./test_runner
-"""
-
-run_main = "g++ src/main.cpp -o main && ./main"
-EOF
-
-#########################################
-# 7. Write .clangd (fix IntelliSense)
-#########################################
-
-echo "✨ Writing .clangd to fix IntelliSense"
+echo "🧠 Writing .clangd"
 
 cat > .clangd << 'EOF'
 CompileFlags:
@@ -143,16 +105,59 @@ CompileFlags:
 EOF
 
 #########################################
-# 8. Run CMake initialization
+# 7. Auto-generate .replit with self-healing RUN button
 #########################################
 
-echo "🔨 Initializing CMake..."
+echo "⚙ Writing .replit configuration"
 
-mkdir -p build
+cat > .replit << 'EOF'
+run = """
+# If build folder missing OR Makefile missing → recreate fully
+if [ ! -f build/Makefile ]; then 
+  rm -rf build
+  mkdir -p build
+  cd build
+  cmake ..
+else
+  cd build
+fi
+
+make
+./test_runner
+"""
+
+[commands]
+
+run_tests = """
+if [ ! -f build/Makefile ]; then 
+  rm -rf build
+  mkdir -p build
+  cd build
+  cmake ..
+else
+  cd build
+fi
+
+make
+./test_runner
+"""
+
+run_main = "g++ src/main.cpp -o main && ./main"
+EOF
+
+#########################################
+# 8. Perform FIRST CMake run automatically
+#########################################
+
+echo "🔨 Performing initial build setup…"
+
+rm -rf build
+mkdir build
 cd build
 cmake ..
+make
 
-echo "🎉 GoogleTest Setup Complete!"
-echo "➡ Click RUN to execute tests"
-echo "➡ Use 'run_main' in Commands to run main.cpp"
+echo "🎉 GoogleTest Installation Complete!"
+echo "🔥 Run button is now fully configured"
+echo "➡ Use run_main or run_tests fro
 
