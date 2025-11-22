@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="banner.png" width="100%" />
+</p>
+
 # 🔥 Replit GoogleTest Auto-Setup — One-Click Installer 🚀  
 ### 😍 The EASIEST Way to Add GoogleTest, CMake, Run Buttons & IntelliSense Fix to ANY Replit C++ Project
 
