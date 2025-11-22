@@ -144,58 +144,58 @@ CompileFlags:
 EOF
 
 ##############################################################
-# 9. Create .replit
+# 9. Create SMART .replit
 ##############################################################
 
-echo "⚙ Writing .replit"
+echo "⚙ Writing smart .replit"
 cat > .replit << 'EOF'
 run = """
+set -e
+
+ACTIVE="$REPLIT_ACTIVE_FILE"
+echo "🟦 Active file: $ACTIVE"
+
+# If test file active → run tests
+if [[ "$ACTIVE" == *"tests/test.cpp"* ]]; then
+  echo "🧪 Running GoogleTests..."
+  if [ ! -f build/Makefile ]; then
+    rm -rf build && mkdir build && cd build && cmake ..
+  else
+    cd build
+  fi
+  make test_runner
+  echo "🟩 Running test_runner..."
+  ./test_runner
+  exit 0
+fi
+
+# If main active → run main_app
+if [[ "$ACTIVE" == *"src/main.cpp"* ]]; then
+  echo "▶ Running main_app..."
+  if [ ! -f build/Makefile ]; then
+    rm -rf build && mkdir build && cd build && cmake ..
+  else
+    cd build
+  fi
+  make main_app
+  ./main_app
+  exit 0
+fi
+
+# Fallback → run main_app
+echo "ℹ Defaulting to main_app..."
 if [ ! -f build/Makefile ]; then
-  rm -rf build
-  mkdir build
-  cd build
-  cmake ..
+  rm -rf build && mkdir build && cd build && cmake ..
 else
   cd build
 fi
-
 make main_app
 ./main_app
-"""
-
-[commands]
-
-run_main = """
-if [ ! -f build/Makefile ]; then
-  rm -rf build
-  mkdir build
-  cd build
-  cmake ..
-else
-  cd build
-fi
-
-make main_app
-./main_app
-"""
-
-run_tests = """
-if [ ! -f build/Makefile ]; then
-  rm -rf build
-  mkdir build
-  cd build
-  cmake ..
-else
-  cd build
-fi
-
-make test_runner
-./test_runner
 """
 EOF
 
 ##############################################################
-# 10. Build
+# 10. Build everything
 ##############################################################
 
 echo "🔨 Running initial build..."
@@ -207,7 +207,7 @@ cmake ..
 make
 
 echo "🎉 GoogleTest installation complete!"
-echo "➡ Run button executes main_app"
-echo "➡ run_tests runs your GoogleTests"
-echo "➡ run_main runs main_app"
+echo "➡ Smart Run button enabled!"
+echo "➡ Opening main.cpp runs main_app"
+echo "➡ Opening test.cpp runs GoogleTests"
 

@@ -2,27 +2,11 @@
 
 echo "🧹 Starting FULL cleanup — restoring original Replit C++ environment..."
 
-##############################################################
-# 1. REMOVE ALL DIRECTORIES CREATED BY SETUP
-##############################################################
-
 rm -rf build src tests
-
-##############################################################
-# 2. REMOVE GENERATED FILES
-##############################################################
-
-rm -f CMakeLists.txt
-rm -f .clangd
-rm -f cmake_install.cmake
-rm -f test_runner main_app libadd_lib.a
-rm -f CMakeCache.txt
+rm -f CMakeLists.txt .clangd cmake_install.cmake test_runner main_app libadd_lib.a CMakeCache.txt
 rm -rf CMakeFiles
 
-##############################################################
-# 3. Restore default replit.nix
-##############################################################
-
+# Restore default replit.nix
 cat > replit.nix << 'EOF'
 { pkgs }: {
   deps = [
@@ -31,19 +15,13 @@ cat > replit.nix << 'EOF'
 }
 EOF
 
-##############################################################
-# 4. Restore default .replit
-##############################################################
-
+# Restore default .replit
 cat > .replit << 'EOF'
 run = "./main"
 compile = "make"
 EOF
 
-##############################################################
-# 5. Restore default Makefile
-##############################################################
-
+# Restore Makefile
 cat > Makefile << 'EOF'
 CC = g++
 CFLAGS = -std=c++17 -Wall
@@ -58,10 +36,7 @@ clean:
 	rm -f $(TARGET)
 EOF
 
-##############################################################
-# 6. Restore default main.cpp if missing
-##############################################################
-
+# Restore main.cpp if missing
 if [ ! -f main.cpp ]; then
 cat > main.cpp << 'EOF'
 #include <iostream>
@@ -72,13 +47,8 @@ int main() {
 EOF
 fi
 
-##############################################################
-# 7. Build & Run
-##############################################################
-
-make
-./main
+make && ./main
 
 echo "🎉 Cleanup complete!"
-echo "🧼 Replit C++ environment fully restored!"
+echo "🧼 Replit C++ default environment fully restored!"
 
